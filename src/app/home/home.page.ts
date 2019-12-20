@@ -23,14 +23,19 @@ export class HomePage
 {
 
 	public results: any;
-	public dateStart:any="2018-12-20";
-	public days:string="23";
-	public country:string="VE";
+	public dateStart:any="";
+	public days:string="";
+	public country:string="";
 	public year:string="2018";
 	public dateStartRequest: any;
 	public dateEnd:any;
 	public dateRange:any;
 
+	public startTime:any;
+	public endTime:any;
+
+	public isButton:boolean=true;
+	public isSpinner:boolean=false;
 
 	constructor(private calendarService: CalendarService,public modalCtrl: ModalController) {}
 
@@ -43,6 +48,9 @@ export class HomePage
 	{
 		if(this.dateStart!="" && this.days!="" && this.country!="")
 		{
+			this.isButton = false;
+			this.isSpinner = true;
+
 			this.dateStartRequest = moment(this.dateStart).add(1, 'd').format('YYYY-MM-DD');
 			this.dateEnd = moment(this.dateStartRequest).add(this.days, 'd').format('YYYY-MM-DD');
 			this.dateEnd = moment(this.dateEnd).add(-1, 'd').format('YYYY-MM-DD');
@@ -53,20 +61,26 @@ export class HomePage
 				{
 					this.results = response;
 					this.results = this.results.holidays
-					console.log(this.results);
 					this.openCalendar(this.dateStartRequest,this.dateEnd);
 				},
 				error =>
 				{
 					console.log(<any>error);
+					alert(error.message);
+					this.isButton = true;
+					this.isSpinner = false;
 				}
 			);
+
+			
 
 		}
 		else
 		{
 			alert('Eliga los datos');
 		}
+
+
 	}
 
 	async openCalendar(start,end)
@@ -130,20 +144,21 @@ export class HomePage
 			inicio.setDate(inicio.getDate() + 1);
 		}
 
-		
-
-		/*for (var j = -1; j <= diffDays; j++)
+		//Para identificar los dias anteriores a la fecha de inicio de forma statica
+		for (var j = 0; j <= 365; j++)
 		{
-			if (inicio.getDay()>0 && inicio.getDay()<6 && j!=-1)
-			{
-				_daysConfig.push({ date: new Date(inicio.getTime()), cssClass: 'gray' })
-			}
+			_daysConfig.push({ date: new Date(inicio.getTime()), cssClass: 'gray' })
 			inicio.setDate(inicio.getDate() - 1);
-		}*/
+		}
 
-		console.log(_daysConfig);
+		//Para identificar los dias posteriores a la fecha de fin de forma statica
+		for (var j = 0; j <= 365; j++)
+		{
+			_daysConfig.push({ date: new Date(fin.getTime()), cssClass: 'gray' })
+			fin.setDate(fin.getDate() + 1);
+		}
 
-
+		
 
 		const options: CalendarModalOptions =
 		{
@@ -157,6 +172,8 @@ export class HomePage
 			canBackwardsSelected: true,
 			from:new Date(start),
 			to:new Date(end),
+			closeLabel : 'Volver',
+  			doneLabel : 'OK',
 		};
 
 		const myCalendar = await this.modalCtrl.create({
@@ -168,14 +185,15 @@ export class HomePage
 
 		const event: any = await myCalendar.onDidDismiss();
 		const date = event.data;
-		date.from = start;
-		date.to = end;
-		const from: CalendarResult = date.from;
-		const to: CalendarResult = date.to;
+		const from: CalendarResult = start;
+		const to: CalendarResult = end;
+
+		if (event.role)
+		{
+			this.isButton = true;
+			this.isSpinner = false;
+		}
 
 	}
-	onChange($event)
-	{
-		console.log($event);
-	}
+
 }

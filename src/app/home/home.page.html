@@ -1,12 +1,14 @@
 <ion-header>
-	<ion-toolbar>
+	<ion-toolbar color="dark">
 		<ion-title>
-			Task Calendar
+			Task Calendar by Anderson Díaz
 		</ion-title>
 	</ion-toolbar>
 </ion-header>
 
 <ion-content>
+
+	<br>
 
 	<ion-item>
 		<ion-label>Fecha de Inicio</ion-label>
@@ -28,10 +30,16 @@
 		<ion-input [(ngModel)]="country"></ion-input>
 	</ion-item>
 
+	<br>
+
 	<ion-row justify-content-center>
-		<ion-button color="primary" (click)="getVacations()">
+		<ion-button color="primary" (click)="getVacations()" [ngClass]="{isBlock: isButton, isNone: !isButton}">
 			Mostrar Calendario
 		</ion-button>
+	</ion-row>
+
+	<ion-row justify-content-center>
+		<ion-spinner name="crescent" [ngClass]="{isBlock: isSpinner, isNone: !isSpinner}"></ion-spinner>
 	</ion-row>
 
 </ion-content>

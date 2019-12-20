@@ -45,6 +45,10 @@ button.days-btn.gray{
 	background-color: gray !important;
 }
 
+button.days-btn.gray p{
+	color: gray !important;
+}
+
 button.days-btn{
 	border-radius: 0px !important;
 }
@@ -60,3 +64,11 @@ button.days-btn.today.on-slected{
 // .days.startSelection:before{
 // 	background-color: green !important;
 // }
+
+.isBlock{
+	display: block !important;
+}
+
+.isNone{
+	display: none !important;
+}
