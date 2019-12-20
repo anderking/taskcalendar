@@ -15,7 +15,7 @@ export class CalendarService extends HeaderService {
     this.urlBase = apiURL;
   }
 
-  getVacations(country:string,year:string="2018") {
+  getVacations(country:string,year:string) {
     return this.http.get(this.urlBase+'pretty&country='+country+'&year='+year+'&key='+this.apiKey, { headers: this.header });
   }
 
